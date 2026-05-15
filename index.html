@@ -78,7 +78,14 @@ click Life href "life.html"
   </div>
 
   <script>
-    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    mermaid.initialize({
+     startOnLoad: true,
+     theme: 'neutral',
+     flowchart: {
+       nodeSpacing: 30,
+       rankSpacing: 60
+      }
+    });
   </script>
 </body>
 </html>
