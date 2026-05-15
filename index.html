@@ -12,6 +12,7 @@
     h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
     p.sub { color: #888; font-size: 13px; margin-bottom: 24px; }
     .chart-wrap { background: #f7f7f5; border: 1px solid #ddd; border-radius: 12px; padding: 16px; overflow-x: auto; }
+    .chart-wrap svg { max-width: 100%; height: auto; }
     .sub-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-top: 20px; }
     .sub-links a { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; color: #222; }
     .sub-links a:hover { background: #f0f0ee; }
@@ -22,10 +23,8 @@
   <nav class="breadcrumb">🏠 My Life Strategy</nav>
   <h1>My Life Strategy</h1>
   <p class="sub">カテゴリをクリックするとサブページへ移動します</p>
-
   <div class="chart-wrap">
-    <div class="mermaid">
-%%{init: {'flowchart': {'nodeSpacing': 30, 'rankSpacing': 60}}}%%
+<div class="mermaid">
 graph LR
 classDef root fill:#888780,stroke:#5F5E5A,color:#2C2C2A
 classDef work fill:#EF9F27,stroke:#854F0B,color:#412402
@@ -38,7 +37,7 @@ classDef study2 fill:#85B7EB,stroke:#378ADD,color:#0C447C
 classDef output2 fill:#5DCAA5,stroke:#1D9E75,color:#085041
 classDef hobby2 fill:#AFA9EC,stroke:#7F77DD,color:#3C3489
 classDef life2 fill:#F0997B,stroke:#D85A30,color:#712B13
-Root["Aoi's Life Strategy"]:::root
+Root["My Life Strategy"]:::root
 Root --> Work[仕事・AI]:::work
 Root --> Study[自己研鑽]:::study
 Root --> Output[アウトプット]:::output
@@ -67,9 +66,8 @@ click Study href "study.html"
 click Output href "output.html"
 click Hobby href "hobby.html"
 click Life href "life.html"
-    </div>
+</div>
   </div>
-
   <div class="sub-links">
     <a href="work.html"><span class="dot" style="background:#EF9F27"></span>仕事・AI</a>
     <a href="study.html"><span class="dot" style="background:#378ADD"></span>自己研鑽</a>
@@ -77,16 +75,8 @@ click Life href "life.html"
     <a href="hobby.html"><span class="dot" style="background:#7F77DD"></span>趣味</a>
     <a href="life.html"><span class="dot" style="background:#D85A30"></span>生活</a>
   </div>
-
   <script>
-    mermaid.initialize({
-     startOnLoad: true,
-     theme: 'neutral',
-     flowchart: {
-       nodeSpacing: 30,
-       rankSpacing: 60
-      }
-    });
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
   </script>
 </body>
 </html>
