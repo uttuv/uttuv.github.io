@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アウトプット | My Life Strategy</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 960px; margin: 0 auto; padding: 24px; }
+    nav.breadcrumb { font-size: 13px; color: #888; margin-bottom: 16px; }
+    nav.breadcrumb a { color: #378ADD; text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+    p.sub { color: #888; font-size: 13px; margin-bottom: 24px; }
+    .chart-wrap { background: #f7f7f5; border: 1px solid #ddd; border-radius: 12px; padding: 16px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <nav class="breadcrumb">
+    <a href="index.html">🏠 My Life Strategy</a> / アウトプット
+  </nav>
+  <h1>アウトプット</h1>
+  <p class="sub">Zenn・SNS・学会発表の戦略</p>
+  <div class="chart-wrap">
+<div class="mermaid">
+graph LR
+classDef output fill:#1D9E75,stroke:#0F6E56,color:#04342C
+classDef output2 fill:#5DCAA5,stroke:#1D9E75,color:#085041
+Output[アウトプット]:::output
+Output --> O1[Zenn・Note]:::output2
+Output --> O2[SNS（X）]:::output2
+Output --> O3[学会発表]:::output2
+</div>
+  </div>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
