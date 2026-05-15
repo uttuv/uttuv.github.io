@@ -4,20 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>仕事・AI | My Life Strategy</title>
-  <script>
-    const PASSWORD = "設定したパスワード";
-    const entered = sessionStorage.getItem("auth");
-    if (entered !== PASSWORD) {
-      const input = prompt("パスワードを入力してください");
-      if (input === PASSWORD) {
-        sessionStorage.setItem("auth", PASSWORD);
-      } else {
-        document.addEventListener("DOMContentLoaded", () => {
-          document.body.innerHTML = "<p style='padding:2rem'>アクセスできません</p>";
-        });
-      }
-    }
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
     body { font-family: sans-serif; max-width: 960px; margin: 0 auto; padding: 24px; }
