@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aoi's Life Strategy</title>
+  <script>
+  const PASSWORD = "3141592";
+  const entered = sessionStorage.getItem("auth");
+  if (entered !== PASSWORD) {
+    const input = prompt("パスワードを入力してください");
+    if (input === PASSWORD) {
+      sessionStorage.setItem("auth", PASSWORD);
+    } else {
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.innerHTML = "<p style='padding:2rem'>アクセスできません</p>";
+      });
+    }
+  }
+</script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
     body { font-family: sans-serif; max-width: 960px; margin: 0 auto; padding: 24px; }
@@ -61,6 +75,11 @@ Life --> L1[セルフケア]:::life2
 Life --> L2[環境整備・自動化]:::life2
 Life --> L3[人間関係]:::life2
 Life --> L4[財務管理]:::life2
+click Work href "work.html"
+click Study href "study.html"
+click Output href "output.html"
+click Hobby href "hobby.html"
+click Life href "life.html"
     </div>
   </div>
 
