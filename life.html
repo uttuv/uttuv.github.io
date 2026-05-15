@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生活 | My Life Strategy</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 960px; margin: 0 auto; padding: 24px; }
+    nav.breadcrumb { font-size: 13px; color: #888; margin-bottom: 16px; }
+    nav.breadcrumb a { color: #378ADD; text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+    p.sub { color: #888; font-size: 13px; margin-bottom: 24px; }
+    .chart-wrap { background: #f7f7f5; border: 1px solid #ddd; border-radius: 12px; padding: 16px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <nav class="breadcrumb">
+    <a href="index.html">🏠 My Life Strategy</a> / 生活
+  </nav>
+  <h1>生活</h1>
+  <p class="sub">セルフケア・環境整備・人間関係・財務の戦略</p>
+  <div class="chart-wrap">
+<div class="mermaid">
+graph LR
+classDef life fill:#D85A30,stroke:#993C1D,color:#4A1B0C
+classDef life2 fill:#F0997B,stroke:#D85A30,color:#712B13
+Life[生活]:::life
+Life --> L1[セルフケア]:::life2
+Life --> L2[環境整備・自動化]:::life2
+Life --> L3[人間関係]:::life2
+Life --> L4[財務管理]:::life2
+</div>
+  </div>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
