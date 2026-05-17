@@ -26,10 +26,20 @@
 graph LR
 classDef work fill:#EF9F27,stroke:#854F0B,color:#412402
 classDef work2 fill:#FAC775,stroke:#EF9F27,color:#633806
+classDef work3 fill:#FAEEDA,stroke:#FAC775,color:#854F0B
 Work[仕事・AI]:::work
 Work --> W1[臨床スキル]:::work2
 Work --> W2[業務自動化]:::work2
 Work --> W3[医療AI知見]:::work2
+W1 --> W1a[症例振り返り]:::work3
+W1 --> W1b[手技]:::work3
+W1 --> W1c[コミュニケーション]:::work3
+W1 --> W1d[病歴要約]:::work3
+W2 --> W2a[課題発見]:::work3
+W2 --> W2b[問題解決]:::work3
+W3 --> W3a[医療DX事例収集]:::work3
+W3 --> W3b[AIツール最新情報]:::work3
+W3 --> W3c[医療特化LLM情報収集]:::work3
 </div>
   </div>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
