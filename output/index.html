@@ -26,10 +26,20 @@
 graph LR
 classDef output fill:#1D9E75,stroke:#0F6E56,color:#04342C
 classDef output2 fill:#5DCAA5,stroke:#1D9E75,color:#085041
+classDef output3 fill:#E1F5EE,stroke:#5DCAA5,color:#0F6E56
 Output[アウトプット]:::output
 Output --> O1[Zenn・Note]:::output2
 Output --> O2[SNS（X）]:::output2
 Output --> O3[学会発表]:::output2
+O1 --> O1a[実装記録の発信]:::output3
+O1 --> O1b[医療×AI知見の発信]:::output3
+O1 --> O1c[ブランディング・実績化]:::output3
+O2 --> O2a[アイデア発信]:::output3
+O2 --> O2b[Note記事の周知・拡散]:::output3
+O2 --> O2c[拡散戦略の研究]:::output3
+O3 --> O3a[血液内科テーマの研究・発表]:::output3
+O3 --> O3b[プレゼンスキル向上]:::output3
+O3 --> O3c[AI活用スライド作成]:::output3
 </div>
   </div>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
