@@ -26,11 +26,19 @@
 graph LR
 classDef hobby fill:#7F77DD,stroke:#534AB7,color:#26215C
 classDef hobby2 fill:#AFA9EC,stroke:#7F77DD,color:#3C3489
+classDef hobby3 fill:#EEEDFE,stroke:#AFA9EC,color:#534AB7
 Hobby[趣味]:::hobby
 Hobby --> H1[FRUITS ZIPPER]:::hobby2
 Hobby --> H2[温泉・旅行]:::hobby2
 Hobby --> H3[Discord]:::hobby2
 Hobby --> H4[コンテンツ消費]:::hobby2
+H1 --> H1a[コンテンツ視聴]:::hobby3
+H1 --> H1b[ライブ参戦]:::hobby3
+H2 --> H2a[近場の温泉・日帰り]:::hobby3
+H2 --> H2b[国内旅行]:::hobby3
+H2 --> H2c[海外旅行]:::hobby3
+H3 --> H3a[戦略的リフレッシュとして活用]:::hobby3
+H4 --> H4a[戦略的リフレッシュとして活用]:::hobby3
 </div>
   </div>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
