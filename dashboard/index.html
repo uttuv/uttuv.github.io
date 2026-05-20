@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日報ダッシュボード | My Life Strategy</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #0e0e0e;
+    --bg2: #161616;
+    --bg3: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #e8e4dc;
+    --muted: #666;
+    --work: #EF9F27;
+    --study: #378ADD;
+    --output: #1D9E75;
+    --hobby: #7F77DD;
+    --life: #D85A30;
+    --accent: #EF9F27;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .header-left .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .header-left h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .sync-info {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .sync-info.ok { color: var(--output); }
+  .sync-info.err { color: var(--life); }
+
+  .refresh-btn {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+  }
+  .refresh-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  nav {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav button {
+    flex: 1;
+    padding: 13px 4px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  nav button.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .content { padding: 16px 20px; }
+
+  .hint {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* Focus tab */
+  .focus-row {
+    display: flex;
+    align-items: center;
+    padding: 11px 14px;
+    margin-bottom: 6px;
+    background: var(--bg2);
+    border-radius: 10px;
+    border-left: 3px solid transparent;
+    transition: background 0.2s;
+  }
+  .focus-row:hover { background: var(--bg3); }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .focus-item { flex: 1; }
+  .focus-item-name { font-size: 14px; font-weight: 500; }
+  .focus-item-cat { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .focus-days { font-size: 12px; font-weight: 500; min-width: 48px; text-align: right; font-family: 'DM Mono', monospace; }
+
+  /* Log tab */
+  .log-card {
+    background: var(--bg2);
+    border-radius: 10px;
+    padding: 13px 16px;
+    margin-bottom: 8px;
+  }
+  .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .log-date { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .log-badge { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-family: 'DM Mono', monospace; }
+  .log-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .log-tag { font-size: 12px; background: var(--bg3); padding: 3px 9px; border-radius: 6px; color: #ccc; }
+  .log-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+  /* Review tab */
+  .review-label { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-bottom: 8px; margin-top: 16px; }
+  .review-label:first-child { margin-top: 0; }
+
+  .range-row { display: flex; gap: 8px; margin-bottom: 4px; }
+  .range-btn {
+    flex: 1; padding: 9px; background: var(--bg2); color: var(--muted);
+    border: 1px solid var(--border); border-radius: 8px; font-size: 12px;
+    cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s;
+  }
+  .range-btn.selected { background: var(--bg3); color: var(--accent); border-color: var(--accent); }
+
+  .bar-section { background: var(--bg2); border-radius: 10px; padding: 14px; margin-bottom: 4px; }
+  .axis-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .axis-bar-row:last-child { margin-bottom: 0; }
+  .axis-label { font-size: 12px; width: 52px; flex-shrink: 0; font-family: 'DM Mono', monospace; }
+  .bar-bg { flex: 1; background: var(--bg3); border-radius: 4px; height: 7px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+  .axis-count { font-size: 11px; color: var(--muted); width: 20px; text-align: right; font-family: 'DM Mono', monospace; }
+
+  .btn-primary {
+    width: 100%; margin-top: 12px; padding: 14px;
+    background: var(--accent); color: #111;
+    border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+  .ai-output {
+    background: var(--bg2); border-radius: 10px;
+    padding: 16px; margin-top: 12px;
+    font-size: 13px; line-height: 1.9; color: #ccc;
+    white-space: pre-wrap;
+  }
+  .ai-output.loading { color: var(--muted); font-style: italic; }
+
+  .state-msg { text-align: center; padding: 48px 20px; font-size: 14px; color: var(--muted); }
+  .state-msg.err { color: var(--life); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="eyebrow">My Life Strategy</div>
+    <h1>日報ダッシュボード</h1>
+  </div>
+  <div class="header-right">
+    <div class="sync-info" id="syncInfo">読み込み中...</div>
+    <button class="refresh-btn" onclick="fetchFromGAS()">↻ 更新</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('focus',this)">フォーカス</button>
+  <button onclick="switchTab('log',this)">履歴</button>
+  <button onclick="switchTab('review',this)">週次レビュー</button>
+</nav>
+
+<div class="content" id="content"></div>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwfq5yJcFwYM8DkCm7yB4VlsuSiLeZobR6D5ehieMEOAkQ_EMbs6-mByVz_kraaPl_p/exec";
+
+const CATEGORIES = {
+  work:   { label: "Work",   color: "#EF9F27", items: ["臨床スキル","業務自動化","医療AI知見"] },
+  study:  { label: "Study",  color: "#378ADD", items: ["IELTS","専門医・医学基盤","テクノロジー","対人心理・交渉術"] },
+  output: { label: "Output", color: "#1D9E75", items: ["Zenn・Note","SNS(X)","学会発表"] },
+  hobby:  { label: "Hobby",  color: "#7F77DD", items: ["FRUITS ZIPPER","温泉・旅行","Discord","コンテンツ消費"] },
+  life:   { label: "Life",   color: "#D85A30", items: ["セルフケア","環境整備・自動化","人間関係","財務管理"] },
+};
+
+const ALL_ITEMS = Object.entries(CATEGORIES).flatMap(([cat,{items}]) => items.map(item => ({cat,item})));
+
+let entries = [];
+let lastDates = {};
+let currentTab = "focus";
+let reviewRange = 7;
+let reviewText = "";
+let reviewLoading = false;
+
+function daysSince(d) {
+  if (!d) return null;
+  return Math.floor((Date.now() - new Date(d).getTime()) / 86400000);
+}
+function urgencyColor(d) {
+  if (d === null) return "#555";
+  if (d <= 3) return "#1D9E75";
+  if (d <= 7) return "#EF9F27";
+  if (d <= 14) return "#D85A30";
+  return "#cc3333";
+}
+function urgencyLabel(d) {
+  if (d === null) return "未記録";
+  if (d === 0) return "今日";
+  if (d === 1) return "昨日";
+  return d + "日前";
+}
+function computeLast(data) {
+  lastDates = {};
+  for (const e of data) {
+    for (const item of (e.items || [])) {
+      const key = e.cat + "::" + item;
+      if (!lastDates[key] || e.date > lastDates[key]) lastDates[key] = e.date;
+    }
+  }
+}
+
+async function fetchFromGAS() {
+  const info = document.getElementById("syncInfo");
+  info.className = "sync-info";
+  info.textContent = "読み込み中...";
+  try {
+    const res = await fetch(GAS_URL);
+    const data = await res.json();
+    entries = data
+      .filter(r => r.date && r.cat)
+      .map(r => ({
+        date: String(r.date).slice(0,10),
+        cat: r.cat,
+        items: Array.isArray(r.items) ? r.items : (r.items ? String(r.items).split(",") : []),
+        note: r.note || ""
+      }))
+      .sort((a,b) => b.date.localeCompare(a.date));
+    computeLast(entries);
+    const t = new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+    info.className = "sync-info ok";
+    info.textContent = "✓ " + t + " 同期";
+  } catch {
+    info.className = "sync-info err";
+    info.textContent = "読み込み失敗";
+  }
+  render();
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+
+function getRecent(days) {
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days);
+  return entries.filter(e => e.date >= cutoff.toISOString().slice(0,10));
+}
+
+async function runReview() {
+  const recent = getRecent(reviewRange);
+  reviewLoading = true; reviewText = ""; render();
+  const catCounts = {};
+  Object.keys(CATEGORIES).forEach(k => catCounts[k] = 0);
+  const itemLog = [];
+  recent.forEach(e => {
+    catCounts[e.cat] = (catCounts[e.cat]||0) + 1;
+    (e.items||[]).forEach(item => itemLog.push("[" + e.date + "] " + CATEGORIES[e.cat]?.label + "/" + item + (e.note ? ": " + e.note : "")));
+  });
+  const neglected = ALL_ITEMS
+    .map(({cat,item}) => { const d = daysSince(lastDates[cat+"::"+item]); return {cat,item,days:d??9999}; })
+    .filter(x => x.days > reviewRange).sort((a,b) => b.days-a.days).slice(0,5)
+    .map(x => CATEGORIES[x.cat].label+"/"+x.item+"（"+(x.days===9999?"未記録":x.days+"日間未着手")+"）").join(", ");
+  const prompt = "あなたは「My Life Strategy」をサポートするAIです。\n直近"+reviewRange+"日の行動ログ：\n\n【カテゴリ別】\n"+Object.entries(catCounts).map(([k,v])=>CATEGORIES[k].label+": "+v+"日").join(" / ")+"\n\n【詳細】\n"+(itemLog.join("\n")||"なし")+"\n\n【疎かな項目】\n"+(neglected||"なし")+"\n\n医師としてIELTS・AI・アウトプットを並行している文脈で、以下を日本語300〜400字で：\n1. バランスの特徴（強み・偏り）\n2. 改善点1〜2点\n3. 来週の推奨アクション（各軸1つ）";
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{role:"user",content:prompt}]})
+    });
+    const data = await res.json();
+    reviewText = data.content?.[0]?.text || "エラーが発生しました";
+  } catch { reviewText = "通信エラー"; }
+  reviewLoading = false; render();
+}
+
+function render() {
+  const el = document.getElementById("content");
+
+  if (currentTab === "focus") {
+    const items = ALL_ITEMS.map(({cat,item}) => ({cat,item,days:daysSince(lastDates[cat+"::"+item])}))
+      .sort((a,b) => (b.days??9999)-(a.days??9999));
+    el.innerHTML = '<div class="hint">取り組んでいない順 — スプレッドシートから同期</div>' +
+      items.map(({cat,item,days}) => {
+        const urg = urgencyColor(days);
+        return '<div class="focus-row" style="border-left-color:'+urg+'">'+
+          '<div class="dot" style="background:'+CATEGORIES[cat].color+'"></div>'+
+          '<div class="focus-item"><div class="focus-item-name">'+item+'</div><div class="focus-item-cat">'+CATEGORIES[cat].label+'</div></div>'+
+          '<div class="focus-days" style="color:'+urg+'">'+urgencyLabel(days)+'</div>'+
+          '</div>';
+      }).join("");
+  }
+
+  if (currentTab === "log") {
+    if (entries.length === 0) {
+      el.innerHTML = '<div class="state-msg">まだ記録がありません</div>';
+    } else {
+      el.innerHTML = entries.map(e =>
+        '<div class="log-card">'+
+        '<div class="log-header"><span class="log-date">'+e.date+'</span>'+
+        '<span class="log-badge" style="background:'+CATEGORIES[e.cat]?.color+'22;color:'+CATEGORIES[e.cat]?.color+'">'+CATEGORIES[e.cat]?.label+'</span></div>'+
+        '<div class="log-tags">'+((e.items||[]).map(i=>'<span class="log-tag">'+i+'</span>').join(""))+'</div>'+
+        (e.note?'<div class="log-note">'+e.note+'</div>':'')+
+        '</div>'
+      ).join("");
+    }
+  }
+
+  if (currentTab === "review") {
+    const recent = getRecent(reviewRange);
+    const catCounts = {};
+    Object.keys(CATEGORIES).forEach(k => catCounts[k] = 0);
+    recent.forEach(e => { catCounts[e.cat] = (catCounts[e.cat]||0)+1; });
+    const maxCount = Math.max(...Object.values(catCounts), 1);
+
+    const rangeBtns = [7,14,30].map(d =>
+      '<button class="range-btn'+(reviewRange===d?" selected":"")+ '" onclick="reviewRange='+d+';render()">直近'+d+'日</button>'
+    ).join("");
+
+    const bars = Object.entries(CATEGORIES).map(([k,v]) => {
+      const cnt = catCounts[k]||0;
+      const pct = Math.round((cnt/maxCount)*100);
+      return '<div class="axis-bar-row">'+
+        '<div class="axis-label" style="color:'+v.color+'">'+v.label+'</div>'+
+        '<div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+v.color+'"></div></div>'+
+        '<div class="axis-count">'+cnt+'</div></div>';
+    }).join("");
+
+    el.innerHTML =
+      '<div class="review-label">期間</div>'+
+      '<div class="range-row">'+rangeBtns+'</div>'+
+      '<div class="review-label">カテゴリ別記録数</div>'+
+      '<div class="bar-section">'+bars+'</div>'+
+      '<button class="btn-primary" onclick="runReview()" '+(reviewLoading?"disabled":"")+'>'+
+        (reviewLoading?"分析中...":"Claudeに振り返りを依頼する →")+
+      '</button>'+
+      (recent.length===0?'<div class="state-msg">この期間の記録がありません</div>':'')+
+      (reviewText?'<div class="review-label">分析結果</div><div class="ai-output">'+reviewText+'</div>':'')+
+      (reviewLoading?'<div class="ai-output loading">Claudeが分析しています...</div>':'');
+  }
+}
+
+fetchFromGAS();
+</script>
+</body>
+</html>
