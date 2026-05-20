@@ -26,11 +26,23 @@
 graph LR
 classDef life fill:#D85A30,stroke:#993C1D,color:#4A1B0C
 classDef life2 fill:#F0997B,stroke:#D85A30,color:#712B13
+classDef life3 fill:#FAECE7,stroke:#F0997B,color:#993C1D
 Life[生活]:::life
 Life --> L1[セルフケア]:::life2
 Life --> L2[環境整備・自動化]:::life2
 Life --> L3[人間関係]:::life2
 Life --> L4[財務管理]:::life2
+L1 --> L1a[食事]:::life3
+L1 --> L1b[運動]:::life3
+L1 --> L1c[睡眠]:::life3
+L2 --> L2a[家事管理]:::life3
+L2 --> L2b[自動化・仕組み化]:::life3
+L3 --> L3a[家族との関係維持]:::life3
+L3 --> L3b[友人との関係維持]:::life3
+L3 --> L3c[恋人との関係維持]:::life3
+L4 --> L4a[収入管理]:::life3
+L4 --> L4b[支出管理]:::life3
+L4 --> L4c[資産運用]:::life3
 </div>
   </div>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
