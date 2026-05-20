@@ -26,11 +26,24 @@
 graph LR
 classDef study fill:#378ADD,stroke:#185FA5,color:#042C53
 classDef study2 fill:#85B7EB,stroke:#378ADD,color:#0C447C
+classDef study3 fill:#E6F1FB,stroke:#85B7EB,color:#185FA5
 Study[自己研鑽]:::study
 Study --> S1[IELTS]:::study2
 Study --> S2[専門医・医学基盤]:::study2
 Study --> S3[テクノロジー]:::study2
 Study --> S4[対人心理・交渉術]:::study2
+S1 --> S1a[毎日英語インプット]:::study3
+S1 --> S1b[語彙・表現の蓄積]:::study3
+S1 --> S1c[IELTS対策]:::study3
+S2 --> S2a[医学基盤の網羅的維持]:::study3
+S2 --> S2b[血液内科専門知識の深化]:::study3
+S2 --> S2c[専門医試験対策]:::study3
+S3 --> S3a[プログラミング基礎]:::study3
+S3 --> S3b[ノーコードツール習熟]:::study3
+S3 --> S3c[効率化コミュニティ・交流]:::study3
+S4 --> S4a[体系的知識のインプット]:::study3
+S4 --> S4b[実践記録]:::study3
+S4 --> S4c[場面別コミュニケーション最適化]:::study3
 </div>
   </div>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
