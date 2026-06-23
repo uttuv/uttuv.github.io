@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>デイリーステータス | My Life Strategy</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f5;
+    --text: #1a1a1a;
+    --text2: #666;
+    --text3: #999;
+    --border: #e0e0e0;
+    --border2: #ccc;
+    --accent: #378ADD;
+    --accent-bg: #e8f1fb;
+    --success: #1D9E75;
+    --success-bg: #e6f7ed;
+    --success-border: #b8e6d0;
+    --danger: #E24B4A;
+    --danger-bg: #fce8e8;
+    --danger-border: #f5c4c4;
+    --danger-text: #A32D2D;
+    --success-text: #0F6E56;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --bg2: #252525;
+      --text: #e8e8e8;
+      --text2: #aaa;
+      --text3: #777;
+      --border: #333;
+      --border2: #444;
+      --accent: #5a9fe6;
+      --accent-bg: #1e2d3d;
+      --success-bg: #1a2e24;
+      --success-border: #2a4a3a;
+      --danger-bg: #2e1a1a;
+      --danger-border: #4a2a2a;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+  }
+  #root { max-width: 440px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  /* nav */
+  .nav { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; font-size: 13px; }
+  .nav a { color: var(--text2); text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+  .nav span { color: var(--text3); }
+
+  /* header */
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  .header p { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .mode-btn {
+    font-size: 12px; padding: 6px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--bg2);
+    color: var(--text2); cursor: pointer; transition: background 0.15s;
+  }
+  .mode-btn:hover { background: var(--border); }
+
+  /* sections */
+  .section { margin-bottom: 22px; }
+  .label { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
+  .input {
+    width: 100%; padding: 10px 12px; font-size: 15px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: var(--bg2); color: var(--text); outline: none;
+    font-family: inherit; transition: border-color 0.15s;
+  }
+  .input:focus { border-color: var(--accent); }
+  .input-date { width: 180px; }
+
+  /* slider */
+  .slider-row { display: flex; align-items: center; gap: 12px; }
+  .slider-row input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slider-val { font-size: 18px; font-weight: 500; min-width: 48px; text-align: right; }
+
+  /* rating */
+  .rating-row { display: flex; gap: 6px; }
+  .rating-btn {
+    width: 44px; height: 44px; border-radius: 10px; font-size: 16px;
+    cursor: pointer; transition: all 0.15s; border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text2); font-weight: 500;
+  }
+  .rating-btn.active {
+    border: 2px solid var(--accent); background: var(--accent);
+    color: #fff; font-weight: 700; transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .rating-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-top: 4px; padding: 0 2px; }
+
+  /* check items */
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--border); background: transparent;
+    text-align: left; font-size: 14px; color: var(--text);
+    font-weight: 400; transition: all 0.15s; width: 100%;
+    font-family: inherit; margin-bottom: 6px;
+  }
+  .check-item.pos-active { border: 2px solid var(--success); background: var(--success-bg); color: var(--success-text); font-weight: 500; }
+  .check-item.risk-active { border: 2px solid var(--danger); background: var(--danger-bg); color: var(--danger-text); font-weight: 500; }
+  .check-box {
+    width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0;
+    border: 1.5px solid var(--border2); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .check-box.pos-active { border: none; background: var(--success); }
+  .check-box.risk-active { border: none; background: var(--danger); }
+
+  /* divider */
+  .divider { border-top: 1px solid var(--border); margin: 8px 0 20px; padding-top: 20px; }
+
+  /* submit */
+  .submit-btn {
+    width: 100%; padding: 14px 0; font-size: 15px; font-weight: 500;
+    border-radius: 12px; border: none; color: #fff; margin-top: 4px;
+    cursor: pointer; transition: opacity 0.15s; font-family: inherit;
+  }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; background: var(--border); }
+  .submit-btn:not(:disabled) { background: var(--accent); opacity: 1; }
+  .submit-btn:not(:disabled):hover { opacity: 0.9; }
+
+  /* result */
+  .result-box { margin-top: 16px; padding: 16px; border-radius: 12px; text-align: center; }
+  .result-box a { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+  .result-box a:hover { text-decoration: underline; }
+  .result-box.saved { background: var(--success-bg); border: 1px solid var(--success-border); }
+  .result-box.saved p { font-size: 14px; color: var(--success); }
+  .result-box.pending { background: var(--accent-bg); border: 1px solid var(--accent); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const GAS_BASE = "https://script.google.com/macros/s/AKfycbwfq5yJcFwYM8DkCm7yB4VlsuSiLeZobR6D5ehieMEOAkQ_EMbs6-mByVz_kraaPl_p/exec";
+
+function getToday() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+const POSITIVE_FLAGS = [
+  "運動した",
+  "ちゃんと休めた",
+  "大事な人と良い関わりがあった",
+  "医学・臨床の学びがあった",
+  "AI・発信・技術を前に進めた",
+];
+
+const RISK_FLAGS = [
+  "食事が大きく崩れた",
+  "動画・SNSを惰性で見すぎた",
+  "ポルノ・性的コンテンツに流れた",
+  "大事な人への対応が雑だった",
+  "強い欲望・衝動に引っ張られた",
+  "深夜テンションで判断しそうになった",
+];
+
+function RatingButtons({ value, onChange, lowLabel, highLabel }) {
+  return (
+    <div>
+      <div className="rating-row">
+        {[1,2,3,4,5].map(n => (
+          <button key={n} className={`rating-btn ${value===n?"active":""}`} onClick={() => onChange(n)}>{n}</button>
+        ))}
+      </div>
+      <div className="rating-labels"><span>{lowLabel}</span><span>{highLabel}</span></div>
+    </div>
+  );
+}
+
+function CheckGroup({ items, selected, onToggle, accent }) {
+  return (
+    <div>
+      {items.map(item => {
+        const checked = selected.includes(item);
+        const cls = checked ? `${accent}-active` : "";
+        return (
+          <button key={item} className={`check-item ${cls}`} onClick={() => onToggle(item)}>
+            <span className={`check-box ${cls}`}>{checked ? "✓" : ""}</span>
+            {item}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function App() {
+  const [date, setDate] = useState(getToday());
+  const [minimal, setMinimal] = useState(false);
+  const [sleep, setSleep] = useState(7);
+  const [energy, setEnergy] = useState(null);
+  const [avoidance, setAvoidance] = useState(null);
+  const [mood, setMood] = useState("");
+  const [posFlags, setPosFlags] = useState([]);
+  const [riskFlags, setRiskFlags] = useState([]);
+  const [posNote, setPosNote] = useState("");
+  const [riskNote, setRiskNote] = useState("");
+  const [memo, setMemo] = useState("");
+  const [saveUrl, setSaveUrl] = useState(null);
+  const [saved, setSaved] = useState(false);
+
+  const canSubmit = energy !== null && avoidance !== null;
+
+  function toggle(item, list, setter) {
+    setter(list.includes(item) ? list.filter(x => x !== item) : [...list, item]);
+  }
+
+  function generate() {
+    const data = { type: "status", date, sleep, energy, avoidance };
+    if (mood) data.mood = mood;
+    if (!minimal) {
+      if (posFlags.length) data.positive_flags = posFlags;
+      if (riskFlags.length) data.risk_flags = riskFlags;
+      if (posNote) data.positive_note = posNote;
+      if (riskNote) data.risk_note = riskNote;
+    }
+    if (memo) data.memo = memo;
+    const encoded = encodeURIComponent(JSON.stringify(data));
+    setSaveUrl(`${GAS_BASE}?action=post&data=${encoded}`);
+    setSaved(false);
+  }
+
+  return (
+    <div>
+      <nav className="nav">
+        <a href="https://uttuv.github.io/">Top</a>
+        <span>›</span>
+        <span>デイリーステータス</span>
+      </nav>
+
+      <div className="header">
+        <div>
+          <h1>デイリーステータス</h1>
+          <p>{minimal ? "最低限版" : "通常版"}</p>
+        </div>
+        <button className="mode-btn" onClick={() => setMinimal(!minimal)}>
+          {minimal ? "通常版に切替" : "最低限版に切替"}
+        </button>
+      </div>
+
+      <div className="section">
+        <label className="label">日付</label>
+        <input type="date" className="input input-date" value={date} onChange={e => setDate(e.target.value)} />
+      </div>
+
+      <div className="section">
+        <label className="label">睡眠時間</label>
+        <div className="slider-row">
+          <input type="range" min={0} max={12} step={0.5} value={sleep} onChange={e => setSleep(parseFloat(e.target.value))} />
+          <span className="slider-val">{sleep}h</span>
+        </div>
+      </div>
+
+      <div className="section">
+        <label className="label">エネルギー</label>
+        <RatingButtons value={energy} onChange={setEnergy} lowLabel="消耗" highLabel="充実" />
+      </div>
+
+      <div className="section">
+        <label className="label">逃避スコア</label>
+        <RatingButtons value={avoidance} onChange={setAvoidance} lowLabel="なし" highLabel="強い" />
+      </div>
+
+      <div className="section">
+        <label className="label">気分（一言）</label>
+        <input type="text" className="input" value={mood} onChange={e => setMood(e.target.value)} placeholder="例：集中できた、疲弊、フラット" />
+      </div>
+
+      {!minimal && (
+        <>
+          <div className="divider">
+            <label className="label" style={{fontSize:14,color:"var(--success)"}}>守れた・良かったこと</label>
+            <CheckGroup items={POSITIVE_FLAGS} selected={posFlags} onToggle={item => toggle(item,posFlags,setPosFlags)} accent="pos" />
+            <div style={{marginTop:10}}>
+              <input type="text" className="input" value={posNote} onChange={e => setPosNote(e.target.value)} placeholder="今日守れたもの・前に進めたこと" />
+            </div>
+          </div>
+          <div className="section">
+            <label className="label" style={{fontSize:14,color:"var(--danger)"}}>崩れ・注意</label>
+            <CheckGroup items={RISK_FLAGS} selected={riskFlags} onToggle={item => toggle(item,riskFlags,setRiskFlags)} accent="risk" />
+            <div style={{marginTop:10}}>
+              <input type="text" className="input" value={riskNote} onChange={e => setRiskNote(e.target.value)} placeholder="補足・気づき" />
+            </div>
+          </div>
+        </>
+      )}
+
+      <div className="section">
+        <label className="label">一言メモ（任意）</label>
+        <input type="text" className="input" value={memo} onChange={e => setMemo(e.target.value)} placeholder="今日の総括など" />
+      </div>
+
+      <button className="submit-btn" disabled={!canSubmit} onClick={generate}>保存リンクを生成</button>
+
+      {saveUrl && (
+        <div className={`result-box ${saved?"saved":"pending"}`}>
+          {saved ? (
+            <p>✓ 保存リンクを開きました</p>
+          ) : (
+            <a href={saveUrl} target="_blank" rel="noopener noreferrer" onClick={() => setSaved(true)}>こちらをタップして保存</a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
